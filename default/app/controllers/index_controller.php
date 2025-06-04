@@ -1,8 +1,10 @@
 <?php
-
-class IndexController extends Controller
+class IndexController extends AppController
 {
-
-    public function index(){}
-
+    public function index()
+    {
+        // Lógica para cargar tu página principal
+        $this->title = 'Bienvenido a Adelitas';
+        $this->render();
+    }
 }
