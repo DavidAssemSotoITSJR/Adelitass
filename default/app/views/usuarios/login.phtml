@@ -1,0 +1,142 @@
+<?php View::content() ?>
+<style>
+    :root {
+        --verde-primario: #2E8B57;       /* Verde mar */
+        --verde-secundario: #3CB371;    /* Verde medio */
+        --verde-oscuro: #228B22;        /* Verde foresta */
+        --rojo-error: #D22B2B;          /* Rojo */
+        --blanco: #FFFFFF;              /* Blanco puro */
+        --gris-claro: #F8F9FA;         /* Gris de fondo */
+    }
+
+    body {
+        background-color: var(--gris-claro);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .login-container {
+        max-width: 400px;
+        margin: 5rem auto;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+        color: var(--blanco);
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .login-header h2 {
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .login-body {
+        background-color: var(--blanco);
+        padding: 2rem;
+    }
+
+    .form-label {
+        color: var(--verde-oscuro);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border: 2px solid #E0E0E0;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: var(--verde-primario);
+        box-shadow: 0 0 0 0.25rem rgba(46, 139, 87, 0.25);
+    }
+
+    .btn-login {
+        background-color: var(--verde-primario);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+
+    .btn-login:hover {
+        background-color: var(--verde-oscuro);
+        transform: translateY(-2px);
+    }
+
+    .alert-error {
+        background-color: var(--rojo-error);
+        color: var(--blanco);
+        border-radius: 8px;
+        border: none;
+    }
+
+    .alert-success {
+        background-color: var(--verde-primario);
+        color: var(--blanco);
+        border-radius: 8px;
+        border: none;
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: #666;
+    }
+
+    .login-footer a {
+        color: var(--verde-primario);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-header">
+        <h2>Bienvenido a Nuestra Tienda</h2>
+    </div>
+
+    <div class="login-body">
+        <?php if (Session::has('flash')) : ?>
+            <?php $flash = Session::get('flash') ?>
+            <div class="alert alert-<?= $flash['type'] == 'error' ? 'error' : 'success' ?> mb-4">
+                <?= $flash['message'] ?>
+            </div>
+            <?php Session::delete('flash') ?>
+        <?php endif ?>
+
+        <?= Form::open('usuarios/autenticar') ?>
+        <div class="mb-4">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <?= Form::email('email', 'class="form-control" placeholder="tucorreo@ejemplo.com" required') ?>
+        </div>
+
+        <div class="mb-4">
+            <label for="password" class="form-label">Contraseña</label>
+            <?= Form::password('password', 'class="form-control" placeholder="Ingresa tu contraseña" required') ?>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-login">INICIAR SESIÓN</button>
+        </div>
+        <?= Form::close() ?>
+
+        <div class="login-footer">
+            <p>¿No tienes una cuenta? <a href="<?= PUBLIC_PATH ?>usuarios/registro">Regístrate aquí</a></p>
+            <p><a href="<?= PUBLIC_PATH ?>usuarios/recuperar">¿Olvidaste tu contraseña?</a></p>
+        </div>
+    </div>
+</div>

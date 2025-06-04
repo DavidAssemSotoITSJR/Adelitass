@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Información del Cliente</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .cliente-info {
+            background-color: #ffffff;
+            padding: 25px;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #a60f2e;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            min-width: 120px;
+        }
+        .info-value {
+            color: #333;
+        }
+        .btn-regresar {
+            display: inline-block;
+            margin-top: 25px;
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 25px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-regresar:hover {
+            background-color: #a60f2e;
+        }
+        .text-muted {
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cliente-info">
+    <h2>Información del Cliente</h2>
+
+    <?php if (!empty($cliente) && (is_object($cliente) || is_array($cliente))) : ?>
+        <!-- Si es objeto -->
+        <?php if (is_object($cliente)) : ?>
+            <div class="info-row">
+                <span class="info-label">ID:</span>
+                <span class="info-value"><?= htmlspecialchars($cliente->id ?? 'N/A') ?></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nombre:</span>
+                <span class="info-value"><?= htmlspecialchars($cliente->nombre ?? 'Sin especificar') ?></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Teléfono:</span>
+                <span class="info-value"><?= htmlspecialchars($cliente->telefono ?? 'No proporcionado') ?></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Correo:</span>
+                <span class="info-value">
+                    <?= !empty($cliente->email) ? htmlspecialchars($cliente->email) : '<span class="text-muted">No registrado</span>' ?>
+                </span>
+            </div>
+
+        <?php elseif (is_array($cliente)) : ?>
+            <div class="info-row">
+                <span class="info-label">ID:</span>
+                <span class="info-value"><?= htmlspecialchars($cliente['id'] ?? 'N/A') ?></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nombre:</span>
+                <span class="info-value"><?= htmlspecialchars($cliente['nombre'] ?? 'Sin especificar') ?></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Teléfono:</span>
+                <span class="info-value"><?= htmlspecialchars($cliente['telefono'] ?? 'No proporcionado') ?></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Correo:</span>
+                <span class="info-value">
+                    <?= !empty($cliente['email']) ? htmlspecialchars($cliente['email']) : '<span class="text-muted">No registrado</span>' ?>
+                </span>
+            </div>
+        <?php endif; ?>
+
+    <?php else: ?>
+        <div class="alert">
+            <p>No se encontró información del cliente.</p>
+            <p class="text-muted">El ID solicitado no existe o no está disponible.</p>
+        </div>
+    <?php endif; ?>
+
+    <center>
+        <a class="btn-regresar" href="<?= htmlspecialchars(PUBLIC_PATH . 'clientes') ?>">← Volver al listado</a>
+    </center>
+</div>
+
+</body>
+</html>

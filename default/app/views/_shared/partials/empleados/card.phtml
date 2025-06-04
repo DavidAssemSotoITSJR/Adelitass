@@ -1,0 +1,10 @@
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">Empleado: [<?= $empleado->id_empleado ?>] - <?= $empleado->nombre ?></h5>
+        <img src="/storage/empleados/<?= $empleado->id_empleado ?>.jpg"
+             style="width:80px; height:80px; border-radius:50%;"
+             alt="Foto de <?= $empleado->nombre ?>">
+        <h6 class="card-subtitle mb-2 text-muted">Puesto: <?= $empleado->id_puesto ?></h6>
+        <p class="card-text">Teléfono: <?= $empleado->telefono ?></p>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+
+
+<style>
+    .content-header {
+        background-color: #228B22; /* Verde forestal */
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+    }
+
+    .card-header {
+        background-color: #6cc112; /* Verde */
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #DC143C; /* Rojo carmesí */
+        border-color: #c11236;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #c11236;
+        border-color: #a60f2e;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        color: #228B22;
+    }
+
+    .table-bordered thead th {
+        border-bottom: 2px solid #228B22;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: 0.25rem;
+    }
+</style>
+<h1>Clientes</h1>
+
+<?= Html::link('clientes/registrar', 'Agregar Cliente', 'class="btn btn-primary"') ?>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($clientes as $cliente): ?>
+        <tr>
+            <td><?= $cliente->id ?></td>
+            <td>
+                <?= Html::link("clientes/show/{$cliente->id}", $cliente->nombre) ?>
+            </td>
+            <td><?= $cliente->telefono ?></td>
+            <td><?= $cliente->email ?></td>
+            <td>
+                <?= Html::link("clientes/show/{$cliente->id}", 'Ver', 'class="btn btn-sm btn-info"') ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

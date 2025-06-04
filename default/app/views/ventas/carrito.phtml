@@ -1,0 +1,212 @@
+<?php View::template('adminlte') ?>
+
+<style>
+    .content-header {
+        background-color: #228B22;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+    }
+    .card-header {
+        background-color: #63a139;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+    .table th {
+        background-color: #f8f9fa;
+        color: #ff0000;
+    }
+    .text-total {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #228B22;
+    }
+    .form-check {
+        margin-bottom: 10px;
+    }
+    .card-footer {
+        border-top: 1px solid rgba(0,0,0,.1);
+        padding: 0.75rem 1.25rem;
+        background-color: #f8f9fa!important;
+    }
+    .text-muted {
+        font-size: 0.85em;
+    }
+    .timeline-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+
+<section class="content-header">
+    <h1>Carrito de Compra</h1>
+</section>
+
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Resumen de Compra</h3>
+        </div>
+        <div class="card-body">
+            <?php if ($cliente): ?>
+                <p><strong>Cliente:</strong> <?= htmlspecialchars($cliente->nombre) ?></p>
+                <p><strong>Hora de compra:</strong> <?= date('H:i:s') ?></p>
+            <?php endif; ?>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio Unitario</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th>Hora selección</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($productos as $producto): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($producto['nombre']) ?></td>
+                        <td>$<?= number_format($producto['precio'], 2) ?></td>
+                        <td><?= htmlspecialchars($producto['cantidad']) ?></td>
+                        <td>$<?= number_format($producto['precio'] * $producto['cantidad'], 2) ?></td>
+                        <td><?= date('H:i:s') ?></td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="4" class="text-right">Total:</th>
+                    <th class="text-total">$<?= number_format($total, 2) ?></th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">
+                <i class="fas fa-calendar-day"></i> Fecha: <?= date('d/m/Y') ?> |
+                <i class="fas fa-clock"></i> Hora: <?= date('H:i:s') ?>
+            </small>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Método de Pago</h3>
+        </div>
+        <div class="card-body">
+            <?= Form::open('ventas/procesarPago') ?>
+            <div class="form-group">
+                <?php
+                // Asegúrate de incluir el método de pago "A crédito" en el controlador
+                $metodos_pago = [
+                    'efectivo' => 'Efectivo',
+                    'tarjeta_debito' => 'Tarjeta de Débito',
+                    'tarjeta_credito' => 'Tarjeta de Crédito',
+                    'credito' => 'A crédito', // Aquí se muestra "A crédito"
+                ];
+                ?>
+                <?php foreach ($metodos_pago as $valor => $etiqueta): ?>
+                    <div class="form-check">
+                        <?= Form::radio("pago.metodo", $valor, null, "class='form-check-input' id='pago_metodo_$valor'") ?>
+                        <?= Form::label($etiqueta, "pago_metodo_$valor", "class='form-check-label'") ?>
+                    </div>
+                <?php endforeach ?>
+            </div>
+
+            <div class="form-group" id="efectivo-group" style="display:none;">
+                <?= Form::label("Monto Recibido", "pago_monto_recibido") ?>
+                <?= Form::number("pago.monto_recibido", "class='form-control' step='0.01' id='pago_monto_recibido'") ?>
+            </div>
+
+            <div class="form-group" id="credito-group" style="display:none;">
+                <?= Form::label("Monto Inicial (Enganche)", "pago_monto_inicial") ?>
+                <?= Form::number("pago.monto_inicial", "class='form-control' step='0.01' id='pago_monto_inicial'") ?>
+                <?= Form::label("Plazo (Meses)", "pago_plazo") ?>
+                <?= Form::number("pago.plazo", "class='form-control' id='pago_plazo' min='1' max='36'") ?>
+            </div>
+
+            <div class="form-group" id="tarjeta-group" style="display:none;">
+                <?= Form::label("Últimos 4 dígitos de la tarjeta", "pago_numero_tarjeta") ?>
+                <?= Form::text("pago.numero_tarjeta", "class='form-control' maxlength='4' id='pago_numero_tarjeta'") ?>
+            </div>
+
+            <div class="text-right mt-3">
+                <a href="<?= PUBLIC_PATH ?>ventas/nueva" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i> Confirmar Venta
+                </button>
+            </div>
+            <?= Form::close() ?>
+        </div>
+        <div class="card-footer timeline-footer">
+            <small class="text-muted">
+                <i class="fas fa-sync-alt"></i> Actualizado: <?= date('d/m/Y H:i:s') ?>
+            </small>
+            <?php if(Session::get('usuario_id')): ?>
+                <small class="text-muted">
+                    <i class="fas fa-user-tie"></i> Vendedor: <?= Session::get('usuario_nombre') ?>
+                </small>
+            <?php endif ?>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function() {
+        // Mostrar/ocultar campos según método de pago
+        $('input[name="pago[metodo]"]').change(function() {
+            $('#efectivo-group').hide();
+            $('#tarjeta-group').hide();
+            $('#credito-group').hide();
+
+            if (this.value === 'efectivo') {
+                $('#efectivo-group').show();
+            } else if (this.value === 'credito') {
+                $('#credito-group').show();
+            } else if (this.value.includes('tarjeta')) {
+                $('#tarjeta-group').show();
+            }
+        });
+
+        // Validación básica del formulario
+        $('form').submit(function(e) {
+            const metodo = $('input[name="pago[metodo]"]:checked').val();
+
+            if (!metodo) {
+                alert('Por favor seleccione un método de pago');
+                return false;
+            }
+
+            if (metodo === 'efectivo' && !$('#pago_monto_recibido').val()) {
+                alert('Por favor ingrese el monto recibido');
+                return false;
+            }
+
+            if (metodo === 'credito') {
+                if (!$('#pago_monto_inicial').val()) {
+                    alert('Por favor ingrese el monto inicial (enganche)');
+                    return false;
+                }
+                if (!$('#pago_plazo').val()) {
+                    alert('Por favor ingrese el plazo en meses');
+                    return false;
+                }
+            }
+
+            if (metodo.includes('tarjeta') && !$('#pago_numero_tarjeta').val()) {
+                alert('Por favor ingrese los últimos 4 dígitos de la tarjeta');
+                return false;
+            }
+
+            return true;
+        });
+
+        // Actualizar hora cada segundo
+        setInterval(function() {
+            $('.timeline-footer small:first').html('<i class="fas fa-sync-alt"></i> Actualizado: ' + new Date().toLocaleString('es-ES'));
+        }, 1000);
+    });
+</script>

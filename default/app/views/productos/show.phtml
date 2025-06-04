@@ -1,0 +1,54 @@
+<style>
+    .content-header {
+        background-color: #228B22; /* Verde forestal */
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+    }
+
+    .card-header {
+        background-color: #6cc112; /* Verde */
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #DC143C; /* Rojo carmesí */
+        border-color: #c11236;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #c11236;
+        border-color: #a60f2e;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        color: #228B22;
+    }
+
+    .table-bordered thead th {
+        border-bottom: 2px solid #228B22;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: 0.25rem;
+    }
+</style>
+<a href="<?= URL_APP ?>/productos" class="btn btn-secondary mb-3" style="position: absolute; top: 20px; left: 20px;">
+    Regresar
+</a>
+<br><br>
+
+<h1>Producto: <?= $producto->id ?> - <?= $producto->nombre ?></h1>
+<ul>
+    <li>Precio: $<?= $producto->precio ?></li>
+    <li>Existencias: <?= $producto->stock ?></li>
+    <li>Categoría: <?= $producto->categorias_id ?></li>
+</ul>

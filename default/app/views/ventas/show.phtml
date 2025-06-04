@@ -1,0 +1,70 @@
+<?php View::template('adminlte') ?>
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Detalle de Venta #<?= $ventas->id ?></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="<?= PUBLIC_PATH ?>">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="<?= PUBLIC_PATH ?>ventas">Ventas</a></li>
+                    <li class="breadcrumb-item active">Detalle</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Cliente: <?= $clientes->nombre ?></h3>
+        </div>
+        <div class="card-body">
+            <p><strong>ID Venta:</strong> <?= $venta->id ?></p>
+            <p><strong>Total:</strong> $<?= number_format($venta->total, 2) ?></p>
+            <p><strong>Estado:</strong> <?= ucfirst($venta->status) ?></p>
+            <p><strong>Fecha:</strong> <?= date('d/m/Y H:i', strtotime($venta->created_at)) ?></p>
+
+            <hr>
+            <h4>Productos vendidos:</h4>
+            <?php if (!empty($venta->detalles)): ?>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($venta->detalles as $detalle): ?>
+                        <tr>
+                            <td><?= $detalle->producto ?></td>
+                            <td><?= $detalle->cantidad ?></td>
+                            <td>$<?= number_format($detalle->precio_unitario, 2) ?></td>
+                            <td>$<?= number_format($detalle->subtotal, 2) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p>No hay productos asociados.</p>
+            <?php endif ?>
+        </div>
+    </div>
+    <!-- Botones -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <a href="<?= PUBLIC_PATH ?>ventas" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+            <button onclick="window.print()" class="btn btn-primary float-right">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+        </div>
+    </div>
+</section>

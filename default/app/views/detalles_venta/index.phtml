@@ -1,0 +1,31 @@
+<h1>Detalles Venta</h1>
+<table border="1" class="table table-striped table-hover" id="myTable">
+
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>ventas_id</th>
+        <th>productos_id</th>
+        <th>cantidad</th>
+        <th>subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($detalles_ventas as $p): ?>
+        <tr>
+            <td><?= $p->id ?></td>
+            <td><a href="http://localhost:8080/Adelitas/detalles_venta/show/<?= $p->id ?>"><?= $p->ventas_id ?></a>
+                <?= Html::link("detalles_venta/show/{$p->id}","Ir a detallles_venta",["class"=>"btn btn-sm","title"=>"ir a detalles_venta:"])?></td>
+
+            <td><?= $p->productos_id ?></td>
+            <td><?= $p->cantidad ?></td>
+            <td><?= $p->subtotal ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<script>
+    let table = new DataTable('#myTable', {
+        // config options...
+    });
+</script>

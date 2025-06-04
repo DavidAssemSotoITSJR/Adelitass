@@ -1,0 +1,247 @@
+<?php View::template('adminlte') ?>
+
+<style>
+    .content-header {
+        background-color: #228B22;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+    }
+
+    .btn-info {
+        background-color: #228B22;
+        border-color: #1c7a1c;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background-color: #1c7a1c;
+        border-color: #166616;
+    }
+
+    .btn-success {
+        background-color: #228B22;
+        border-color: #1c7a1c;
+    }
+
+    .btn-success:hover {
+        background-color: #1c7a1c;
+        border-color: #166616;
+    }
+
+    .btn-secondary {
+        background-color: #DC143C;
+        border-color: #c11236;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #c11236;
+        border-color: #a60f2e;
+    }
+
+    .form-control:focus {
+        border-color: #228B22;
+        box-shadow: 0 0 0 0.2rem rgba(34, 139, 34, 0.25);
+    }
+
+    .form-group label {
+        color: #228B22;
+        font-weight: bold;
+    }
+
+    .productos-agregados {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .producto-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .btn-eliminar {
+        color: #DC143C;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<section class="content-header">
+    <h1>Realizar Nueva Venta</h1>
+</section>
+
+<section class="content">
+    <form action="<?= PUBLIC_PATH ?>ventas/calcular" method="post" id="form-venta">
+        <div class="form-group">
+            <h2 style="color: #228B22;">Cliente</h2>
+            <select name="venta[clientes_id]" class="form-control" required>
+                <option value="">Seleccione un cliente</option>
+                <?php foreach ($clientes as $cliente): ?>
+                    <option value="<?= $cliente->id ?>" <?= isset($cliente_id) && $cliente_id == $cliente->id ? 'selected' : '' ?>>
+                        <?= $cliente->nombre ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        </div>
+
+        <h2 style="color: #228B22;">Agregar Productos</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="producto">Producto</label>
+                    <select id="select-producto" class="form-control">
+                        <option value="">Seleccione un producto</option>
+                        <?php foreach ($productos as $p): ?>
+                            <option value="<?= $p->id ?>" data-precio="<?= $p->precio ?>" data-nombre="<?= $p->nombre ?>">
+                                <?= $p->nombre ?> ($<?= number_format($p->precio, 2) ?>)
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="cantidad">Cantidad</label>
+                    <input type="number" id="input-cantidad" class="form-control" min="1" value="1">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group" style="padding-top: 25px;">
+                    <button type="button" id="btn-agregar" class="btn btn-info">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="productos-agregados">
+            <h4>Productos Seleccionados</h4>
+            <div id="lista-productos">
+                <?php if (isset($productos_seleccionados)): ?>
+                    <?php foreach ($productos_seleccionados as $index => $prod): ?>
+                        <div class="producto-item" data-id="<?= $prod['id'] ?>">
+                            <span><?= $prod['nombre'] ?> (Cant: <?= $prod['cantidad'] ?>, $<?= number_format($prod['precio'], 2) ?>)</span>
+                            <input type="hidden" name="productos[<?= $index ?>][id]" value="<?= $prod['id'] ?>">
+                            <input type="hidden" name="productos[<?= $index ?>][cantidad]" value="<?= $prod['cantidad'] ?>">
+                            <button type="button" class="btn-eliminar"> X </button>
+                        </div>
+                    <?php endforeach ?>
+                <?php else: ?>
+                    <p>No hay productos agregados</p>
+                <?php endif ?>
+            </div>
+        </div>
+
+        <div class="form-group mt-4">
+            <label>Total</label>
+            <input type="text" id="input-total" class="form-control" disabled value="<?= isset($total) ? '$' . number_format($total, 2) : '$0.00' ?>">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Ver Carrito</button>
+            <a href="<?= PUBLIC_PATH ?>ventas/" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectProducto = document.getElementById('select-producto');
+        const inputCantidad = document.getElementById('input-cantidad');
+        const btnAgregar = document.getElementById('btn-agregar');
+        const listaProductos = document.getElementById('lista-productos');
+        const inputTotal = document.getElementById('input-total');
+        const formVenta = document.getElementById('form-venta');
+
+        // Agregar producto a la lista
+        btnAgregar.addEventListener('click', function() {
+            const productoId = selectProducto.value;
+            const productoNombre = selectProducto.options[selectProducto.selectedIndex].getAttribute('data-nombre');
+            const productoPrecio = selectProducto.options[selectProducto.selectedIndex].getAttribute('data-precio');
+            const cantidad = inputCantidad.value;
+
+            if (!productoId || !cantidad || cantidad < 1) {
+                alert('Por favor seleccione un producto y una cantidad válida');
+                return;
+            }
+
+            // Verificar si el producto ya está en la lista
+            const productoExistente = document.querySelector(`.producto-item[data-id="${productoId}"]`);
+
+            if (productoExistente) {
+                // Actualizar cantidad si el producto ya existe
+                const inputCantidadExistente = productoExistente.querySelector('input[name*="cantidad"]');
+                const nuevaCantidad = parseInt(inputCantidadExistente.value) + parseInt(cantidad);
+                inputCantidadExistente.value = nuevaCantidad;
+
+                // Actualizar texto mostrado
+                const span = productoExistente.querySelector('span');
+                span.textContent = `${productoNombre} (Cant: ${nuevaCantidad}, $${parseFloat(productoPrecio).toFixed(2)})`;
+            } else {
+                // Crear nuevo elemento de producto
+                const index = document.querySelectorAll('.producto-item').length;
+                const productoItem = document.createElement('div');
+                productoItem.className = 'producto-item';
+                productoItem.setAttribute('data-id', productoId);
+                productoItem.innerHTML = `
+                <span>${productoNombre} (Cant: ${cantidad}, $${parseFloat(productoPrecio).toFixed(2)})</span>
+                <input type="hidden" name="productos[${index}][id]" value="${productoId}">
+                <input type="hidden" name="productos[${index}][cantidad]" value="${cantidad}">
+                <button type="button" class="btn-eliminar">×</button>
+            `;
+                listaProductos.appendChild(productoItem);
+            }
+
+            // Limpiar selección
+            selectProducto.value = '';
+            inputCantidad.value = '1';
+
+            // Actualizar total preliminar
+            actualizarTotalPreliminar();
+        });
+
+        // Eliminar producto de la lista
+        listaProductos.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-eliminar')) {
+                e.target.closest('.producto-item').remove();
+                reindexarProductos();
+                actualizarTotalPreliminar();
+            }
+        });
+
+        // Reindexar productos después de eliminar
+        function reindexarProductos() {
+            const items = document.querySelectorAll('.producto-item');
+            items.forEach((item, index) => {
+                const inputs = item.querySelectorAll('input[type="hidden"]');
+                inputs[0].name = `productos[${index}][id]`;
+                inputs[1].name = `productos[${index}][cantidad]`;
+            });
+        }
+
+        // Calcular total preliminar
+        function actualizarTotalPreliminar() {
+            let total = 0;
+            document.querySelectorAll('.producto-item').forEach(item => {
+                const precio = parseFloat(item.querySelector('span').textContent.match(/\$([\d.]+)/)[1]);
+                const cantidad = parseInt(item.querySelector('input[name*="cantidad"]').value);
+                total += precio * cantidad;
+            });
+            inputTotal.value = '$' + total.toFixed(2);
+        }
+
+        // Validar que hay productos antes de enviar
+        formVenta.addEventListener('submit', function(e) {
+            if (document.querySelectorAll('.producto-item').length === 0) {
+                e.preventDefault();
+                alert('Debe agregar al menos un producto');
+            }
+        });
+    });
+</script>

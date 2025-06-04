@@ -1,0 +1,29 @@
+<?php
+class Usuarios extends ActiveRecord
+{
+    // Configuración del modelo
+    public function initialize()
+    {
+        // Validaciones
+        $this->validates_email_in('email', 'message: Ingrese un email válido');
+        $this->validates_presence_of('password', 'message: La contraseña es obligatoria');
+    }
+
+    // Método para encriptar la contraseña (deberías migrar a password_hash)
+    public function before_save()
+    {
+        if ($this->password && !empty($this->password)) {
+            $this->password = md5($this->password); // Temporal - migrar a password_hash
+        }
+    }
+
+    // Método para autenticar (puedes personalizarlo)
+    public static function authenticate($email, $password)
+    {
+        $user = (new self)->find_first("email = '$email'");
+        if ($user && $user->password === md5($password)) {
+            return $user;
+        }
+        return false;
+    }
+}

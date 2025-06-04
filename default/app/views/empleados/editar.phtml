@@ -1,0 +1,87 @@
+<style>
+    .content-header {
+        background-color: #228B22; /* Verde forestal */
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+    }
+
+    .card-header {
+        background-color: #6cc112; /* Verde */
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #DC143C; /* Rojo carmesí */
+        border-color: #c11236;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #c11236;
+        border-color: #a60f2e;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        color: #228B22;
+    }
+
+    .table-bordered thead th {
+        border-bottom: 2px solid #228B22;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: 0.25rem;
+    }
+</style>
+<div class="container">
+    <h2>Editar Empleado</h2>
+
+    <?= Html::link('empleados/index', 'Volver', 'class="btn btn-secondary mb-3"') ?>
+
+    <?php View::content(); ?>
+
+    <?= Form::open("empleados/actualizar/$empleado->id") ?>
+
+    <div class="form-group">
+        <?= Form::label('empleados.nombre', 'Nombre Completo') ?>
+        <?= Form::text('empleados.nombre', 'class="form-control" required value="'.htmlentities($empleado->nombre).'"') ?>
+    </div>
+
+    <div class="form-group">
+        <?= Form::label('empleados.email', 'Email') ?>
+        <?= Form::email('empleados.email', 'class="form-control" required value="'.htmlentities($empleado->email).'"') ?>
+    </div>
+
+    <div class="form-group">
+        <?= Form::label('empleados.telefono', 'Teléfono') ?>
+        <?= Form::text('empleados.telefono', 'class="form-control" required value="'.htmlentities($empleado->telefono).'"') ?>
+    </div>
+
+    <div class="form-group mt-3">
+        <?= Form::label('empleados.contraseña', 'Nueva Contraseña (opcional)', 'class="form-label"') ?>
+        <?= Form::password('empleados.contraseña', 'class="form-control"') ?>
+        <div class="form-text text-muted">Déjalo en blanco si no deseas cambiarla</div>
+    </div>
+
+    <?= Form::submit('Actualizar', 'class="btn btn-primary mt-3"') ?>
+
+    <?= Form::close() ?>
+</div>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function(e) {
+        if (!this.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        this.classList.add('was-validated');
+    });
+</script>

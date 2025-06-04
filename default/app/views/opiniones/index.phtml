@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Opiniones - Adelita's Pizza</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+        .contenedor-dashboard {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-top: 30px;
+        }
+        .tabla-opiniones, .chart-container {
+            width: 45%;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #27ae60;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e9f7ef;
+        }
+        .btn-regresar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px;
+            text-align: center;
+            background-color: #c0392b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<h1>Dashboard de Opiniones - Adelita's Pizza</h1>
+<a href="/Adelitas/main" class="btn-regresar">Regresar</a>
+<div class="contenedor-dashboard">
+    <div class="tabla-opiniones">
+        <h2>Últimas Opiniones</h2>
+        <table>
+            <tr>
+                <th>Cliente</th>
+                <th>Comentario</th>
+                <th>Calificación</th>
+            </tr>
+            <?php foreach ($opiniones as $op): ?>
+                <tr>
+                    <td><?= $op->id_cliente ?></td>
+                    <td>"<?= $op->opinion ?>"</td>
+                    <td><?= $op->calificacion ?>/5</td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <div class="chart-container">
+        <h2>Distribución de Opiniones</h2>
+        <canvas id="opinionesChart"></canvas>
+    </div>
+</div>
+<script>
+    const calificaciones = <?= $conteo_json ?>;
+    const ctx = document.getElementById('opinionesChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['0 estrellas', '1 estrella', '2 estrellas', '3 estrellas', '4 estrellas', '5 estrellas'],
+            datasets: [{
+                label: 'Número de Opiniones',
+                data: calificaciones,
+                backgroundColor: ['#c0392b', '#e74c3c', '#f1c40f', '#27ae60', '#2ecc71', '#2980b9'],
+                borderColor: '#34495e',
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Cantidad de Opiniones' } },
+                x: { title: { display: true, text: 'Calificación' } }
+            }
+        }
+    });
+</script>
+</body>
+</html>

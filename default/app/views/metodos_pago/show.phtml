@@ -1,0 +1,25 @@
+<h1>Metodo: [<?= $metodos_pago->id ?>] - <?= $metodos_pago->nombre ?></h1>
+<h2>Ventas</h2>
+<table class="table table-sm table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Vendedor</th>
+        <th>Metodo Pago</th> awaio joto<3
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($metodos_pago->getVentas() as $v): ?>
+        <tr>
+            <td><?= $v->id ?></td>
+            <td><?= $v->fecha ?></td>
+            <td><?= $v->clientes_id?></td>
+            <td><?= $v->empleados_id ?></td>
+            <td><?= $v->metodos_pago_id ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<a <a href="http://localhost:8082/Adelitas/metodos_pago/">Regresar</a>

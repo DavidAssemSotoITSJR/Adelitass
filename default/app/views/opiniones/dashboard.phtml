@@ -1,0 +1,87 @@
+<div class="container mt-4">
+    <h2 class="mb-3">Panel de Opiniones</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5>Promedio de Calificaciones</h5>
+                <p class="display-4 text-success"><?= $promedio ?></p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5>Opiniones por Calificación</h5>
+                <canvas id="graficaCalificaciones" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Listado de Opiniones</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover table-bordered m-0">
+                <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Comentario</th>
+                    <th>Calificación</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if (!empty($opiniones)): ?>
+                    <?php foreach ($opiniones as $op): ?>
+                        <tr>
+                            <td><?= $op->id ?></td>
+                            <td><?= htmlspecialchars($op->nombre_cliente) ?></td>
+                            <td><?= htmlspecialchars($op->comentario) ?></td>
+                            <td><?= str_repeat("⭐", $op->calificacion) ?> (<?= $op->calificacion ?>)</td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4" class="text-center">No hay opiniones registradas.</td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Incluye Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const conteo = <?= $conteo_json ?>;
+        const ctx = document.getElementById("graficaCalificaciones").getContext("2d");
+
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["0", "1", "2", "3", "4", "5"],
+                datasets: [{
+                    label: "Cantidad",
+                    data: conteo,
+                    backgroundColor: "rgba(54, 162, 235, 0.7)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 1
+                    }
+                }
+            }
+        });
+    });
+</script>

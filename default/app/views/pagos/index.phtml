@@ -1,0 +1,30 @@
+<h1>Pagos</h1>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Cliente</th>
+        <th>Método de Pago</th>
+        <th>Total Aplicado</th>
+        <th>Estado</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($pagos as $pago): ?>
+        <tr>
+            <td><?= h($pago->clientes->nombre ?? 'Sin cliente') ?></td>
+            <td><?= h($pago->metodos_pago->nombre ?? 'Sin método') ?></td>
+            <td>$<?= number_format($pago->getTotalAplicado(), 2) ?></td>
+            <td><?= h($pago->estado) ?></td>
+            <td><?= h(date('Y-m-d H:i', strtotime($pago->created_at))) ?></td>
+            <td>
+                <?= Html::link("pagos/detalle/$pago->id", 'Ver Detalle') ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<p>Página <?= $pagina ?> de <?= $total_paginas ?></p>

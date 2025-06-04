@@ -1,0 +1,25 @@
+<h1>Categoria: [<?= $categorias->id ?>] - <?= $categorias->nombre ?></h1>
+<h2>Categorías</h2>
+<table class="table table-sm table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Vendedor</th>
+        <th>Metodo Pago</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($categorias->getVentas() as $v): ?>
+        <tr>
+            <td><?= $v->id ?></td>
+            <td><?= $v->fecha ?></td>
+            <td><?= $v->clientes_id?></td>
+            <td><?= $v->empleados_id ?></td>
+            <td><?= $v->metodos_pago_id ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<a <a href="http://localhost:8080/Adelitas/categorias/">Regresar</a>

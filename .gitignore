@@ -1,0 +1,33 @@
+vendor
+default/app/temp
+default/public/temp
+
+# Mac filesystem dust
+.DS_Store
+
+# Vagrant
+.vagrant
+
+# Sonarlint
+.sonarlint
+
+#### Editors:
+
+# Netbeans
+/nbproject
+
+# Visual Studio Code
+.vscode
+
+# Intellij
+.idea
+
+#sonar
+.sonar
+.scannerwork
+sonar-project.properties
+
+/default/app/config/.env
+
+/default/app/tmp/cache/*
+!/defualt/app/tmp/cache/.gitkeep

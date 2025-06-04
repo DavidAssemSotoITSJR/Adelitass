@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Producto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .content-header {
+            background-color: #228B22; /* Verde forestal */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+
+        .card-header {
+            background-color: #6cc112; /* Verde */
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #DC143C; /* Rojo carmesí */
+            border-color: #c11236;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #c11236;
+            border-color: #a60f2e;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            color: #228B22;
+        }
+
+        .table-bordered thead th {
+            border-bottom: 2px solid #228B22;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="<?= url('productos/index') ?>" class="btn btn-secondary mt-3">
+        ← Regresar al listado
+    </a>
+
+    <div class="form-container">
+        <h2 class="text-center mb-4">Registrar Nuevo Producto</h2>
+
+        <?php if (Flash::has()): ?>
+            <div class="alert alert-<?= Flash::type() ?> alert-dismissible fade show">
+                <?= Flash::message() ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+
+        <?= Form::open(['enctype' => 'multipart/form-data']) ?>
+
+        <div class="mb-3">
+            <label class="form-label">Nombre del Producto *</label>
+            <?= Form::text('productos.nombre', [
+                'class' => 'form-control',
+                'required' => true,
+                'placeholder' => 'Ej: Pizza Margarita'
+            ]) ?>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Precio *</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <?= Form::number('productos.precio', [
+                        'class' => 'form-control',
+                        'step' => '0.01',
+                        'min' => '0.01',
+                        'required' => true
+                    ]) ?>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Stock *</label>
+                <?= Form::number('productos.stock', [
+                    'class' => 'form-control',
+                    'min' => '0',
+                    'required' => true
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Imagen del Producto</label>
+            <input type="file"
+                   class="form-control"
+                   name="productos[imagen_url]"
+                   accept="image/jpeg, image/png, image/gif">
+            <div class="form-text">Formatos aceptados: JPG, PNG, GIF (Máx. 2MB)</div>
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+                Registrar Producto
+            </button>
+        </div>
+
+        <?= Form::close() ?>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

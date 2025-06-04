@@ -1,0 +1,94 @@
+<?php View::content() ?>
+<style>
+    .bg-primary-custom {
+        background-color: #2e7d32; /* Verde oscuro */
+        color: white;
+    }
+    .btn-primary-custom {
+        background-color: #388e3c; /* Verde */
+        border-color: #2e7d32;
+    }
+    .btn-primary-custom:hover {
+        background-color: #1b5e20; /* Verde más oscuro */
+        border-color: #1b5e20;
+    }
+    .alert-danger-custom {
+        background-color: #d32f2f; /* Rojo */
+        color: white;
+        border-color: #b71c1c;
+    }
+    .alert-success-custom {
+        background-color: #388e3c; /* Verde */
+        color: white;
+        border-color: #2e7d32;
+    }
+    .card-custom {
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card mt-5 card-custom">
+                <div class="card-header bg-primary-custom">
+                    <h3 class="text-center mb-0">Registro de Usuario</h3>
+                </div>
+
+                <div class="card-body bg-white">
+                    <?php if (Session::has('flash')) : ?>
+                        <?php $flash = Session::get('flash') ?>
+                        <div class="alert alert-<?= $flash['type'] == 'error' ? 'danger-custom' : 'success-custom' ?> alert-dismissible fade show">
+                            <?= $flash['message'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <?php Session::delete('flash') ?>
+                    <?php endif ?>
+
+                    <?= Form::open('usuarios/crear') ?>
+                    <?php
+                    // Recuperar datos del formulario si hubo error
+                    $form_data = Session::has('form_data') ? Session::get('form_data') : [];
+                    Session::delete('form_data');
+                    ?>
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label text-dark">Nombre Completo</label>
+                        <?= Form::text('usuarios.nombre',
+                            'class="form-control" placeholder="Tu nombre" required',
+                            isset($form_data['nombre']) ? $form_data['nombre'] : '') ?>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-dark">Email</label>
+                        <?= Form::email('usuarios.email',
+                            'class="form-control" placeholder="tucorreo@ejemplo.com" required',
+                            isset($form_data['email']) ? $form_data['email'] : '') ?>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label text-dark">Contraseña</label>
+                        <?= Form::password('usuarios.password',
+                            'class="form-control" placeholder="Mínimo 6 caracteres" required minlength="6"') ?>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label text-dark">Confirmar Contraseña</label>
+                        <?= Form::password('confirm_password',
+                            'class="form-control" placeholder="Repite tu contraseña" required') ?>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary-custom btn-lg py-2">Registrarse</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <p class="text-dark">¿Ya tienes cuenta? <?= Html::link('usuarios/login', 'Inicia sesión aquí', 'class="text-success"') ?></p>
+                    </div>
+                    <?= Form::close() ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

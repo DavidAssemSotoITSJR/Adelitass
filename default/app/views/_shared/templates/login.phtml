@@ -1,0 +1,19 @@
+<?php header('HTTP/1.1 401 Unauthorized') ?>
+<?php echo View::content() ?>
+
+<form method="post">
+    <div class="ui  form">
+        <div class="two fields">
+            <div class="field">
+                <label>email</label>
+                <input placeholder="email" type="email" name="login[email]" value="cesarhdzjr@gmail.com">
+            </div>
+            <div class="field">
+                <label>Last Name</label>
+                <input placeholder="Password" type="password" name="login[password]" value="123456789">
+            </div>
+        </div>
+
+        <button class="ui submit button" type="submit">Entrar</button>
+    </div>
+</form>

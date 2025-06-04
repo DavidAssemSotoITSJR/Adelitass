@@ -1,0 +1,25 @@
+<?= Form::open() ?>
+
+    <label>Ventas_id</label>
+    <?= Form::number('detalles_ventas.ventas_id',["class"=>"form-control","title"=>"Nombre del producto"]) ?>
+
+    <label>Producto_id</label>
+    <?= Form::number('detalles_ventas.productos_id',["class"=>"form-control","title"=>"Precio del producto"]) ?>
+
+    <label>Cantidad</label>
+    <?= Form::number('detalles_ventas.cantidad',["class"=>"form-control","title"=>"Stock del producto"]) ?>
+
+    <label>subtotal</label>
+    <?= Form::number('detalles_ventas.subtotal',["class"=>"form-control","title"=>"Categoria del producto"]) ?>
+
+<input type="file"
+       class="filepond"
+       name="filepond"
+       multiple
+       data-allow-reorder="true"
+       data-max-file-size="3MB"
+       data-max-files="3">
+
+<?= Form::submit('Guardar') ?>
+<?= Form::close() ?>
+

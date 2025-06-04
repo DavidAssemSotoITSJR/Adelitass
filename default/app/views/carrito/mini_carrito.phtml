@@ -1,0 +1,24 @@
+<?php if (empty($carritoItems)): ?>
+    <div class="alert alert-info mb-0">
+        Tu carrito está vacío
+    </div>
+<?php else: ?>
+    <div class="list-group">
+        <?php foreach ($carritoItems as $item): ?>
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1"><?= $item->nombre ?></h6>
+                        <small><?= $item->cantidad ?> x $<?= number_format($item->precio, 2) ?></small>
+                    </div>
+                    <span class="badge badge-primary badge-pill">$<?= number_format($item->subtotal, 2) ?></span>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+        <strong>Total:</strong>
+        <strong>$<?= number_format($total, 2) ?></strong>
+    </div>
+<?php endif ?>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Adelita's Pizza - Login</title>
+</head>
+<body>
+<div style="text-align: center; padding: 40px; background-color: #ba1818; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; font-family: 'Arial', sans-serif;">
+    <!-- Título de bienvenida -->
+    <h1 style="color: #fff; font-size: 3em; font-weight: bold;">Adelita´s Pizza</h1>
+
+    <!-- Formulario de login con fondo blanco -->
+    <form method="post" style="width: 100%; max-width: 400px; background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: #3a502c; font-size: 1.5em; font-weight: 600;">Por favor, ingresa tus datos</h2>
+        <div class="ui form" style="margin-top: 20px;">
+            <div class="two fields" style="margin-bottom: 20px;">
+                <div class="field">
+                    <label style="color: #7f8c8d; font-size: 1.1em;">Email</label>
+                    <input placeholder="email" type="email" name="login[email]" value="cesarhdzjr@gmail.com" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
+                </div>
+                <div class="field">
+                    <label style="color: #7f8c8d; font-size: 1.1em;">Contraseña</label>
+                    <input placeholder="Password" type="password" name="login[password]" value="1234567890" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
+                </div>
+            </div>
+            <button class="ui submit button" type="submit" style="background-color: #2a8314; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1em; font-weight: bold; width: 100%;">
+                Entrar
+            </button>
+        </div>
+    </form>
+
+    <footer style="margin-top: 30px; color: #fff; font-size: 1em;">
+        <p>&copy; PROGRA WEB</p>
+    </footer>
+</div>
+</body>
+</html>
